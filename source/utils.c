@@ -1,31 +1,38 @@
 #include "malloc.h"
-#include <sys/resource.h>
 
-void *alloc(size_t size)
-{
-    size_t *ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-    if (ptr == MAP_FAILED)
-        return (NULL);
-    if (check_alloc_size(size))
-        return (NULL);
-    return ptr;
-}
-
-int check_alloc_size(size_t size)
+static int check_alloc_size(size_t size)
 {
     struct rlimit limit = {0};
 
     if (getrlimit(RLIMIT_AS, &limit))
         return (1);
-    if (storage.total_allocated_memory + size >= limit.rlim_cur)
+    if (storage.total_allocated_memory + size > limit.rlim_cur)
         return (2);
 
-    storage.total_allocated_memory += size;
     return (0);
+}
+
+void *alloc(size_t size)
+{
+    if (size % storage.page_size != 0)
+        size = ((size / storage.page_size) + 1) * storage.page_size;
+
+    size_t *ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (ptr == MAP_FAILED)
+        return (NULL);
+    if (check_alloc_size(size))
+        return (NULL);
+    storage.total_allocated_memory += size;
+    return ptr;
 }
 
 void dealloc(void *ptr, size_t size)
 {
+    if (size == 0)
+        return;
+    if (size % storage.page_size != 0)
+        size = ((size / storage.page_size) + 1) * storage.page_size;
+        
     if (ptr != NULL && size > 0)
     {
         if (munmap(ptr, size))

@@ -74,10 +74,14 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 - [X] fix bash errors
 - [X] alignment
 - [X] protect against malloc ver max ram or so u know
+- [X]  getpagesize under OSX or sysconf(_SC_PAGESIZE) under linux
+- [X] make functions static so that they can't be accessed from outside of malloc
+- [X] write realloc so that it only copies from previous size
+- [X] write visualizer that works well
+- [X] fix when 256 exist that a 32 byte will be stored inside of that
+- [X] check max allocation on linux
 
-- [ ] make functions static so that they can't be accessed from outside of malloc
-- [ ] write visualizer that works well
-
+---
 - [ ] sorted zones for "quick" access
 - [ ] lifetimes
 - [ ] multithreading

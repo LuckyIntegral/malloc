@@ -1,13 +1,14 @@
 #ifndef MALLOC_H
 #define MALLOC_H
 
-#include <stddef.h>	  // size_t
-#include <sys/mman.h> // mmap + FLAGS
-#include <unistd.h>	  // getpageSize()
-#include <stdint.h>	  //  uintXX_t
+#include <stddef.h>	  		// size_t
+#include <sys/mman.h> 		// mmap + FLAGS
+#include <unistd.h>	  		// getpageSize()
+#include <stdint.h>	  		//  uintXX_t
+#include <sys/resource.h>	// getrlimit()
 
 #ifndef MAP_ANONYMOUS
-#define MAP_ANONYMOUS 0x20 // cant find MAP_ANONYMOUS in sys/mman.h when running on 42MacOs
+#define MAP_ANONYMOUS 0x20 // cant find MAP_ANONYMOUS in sys/mman.h when running on Macs
 #endif
 
 #define BLOCK_SIZES_LEN 2

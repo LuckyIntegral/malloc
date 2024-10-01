@@ -1,10 +1,10 @@
 #include "malloc.h"
 
-t_zone *get_empty_zone(void);
-int extend_zones();
-void ft_bzero(uint8_t *ptr, size_t size);
-t_zone *alloc_zone(t_zone *zone, size_t size);
-uint32_t get_max_nbr_of_blocks(size_t size, uint32_t block_size);
+static t_zone *get_empty_zone(void);
+static int extend_zones();
+static void ft_bzero(uint8_t *ptr, size_t size);
+static t_zone *alloc_zone(t_zone *zone, size_t size);
+static uint32_t get_max_nbr_of_blocks(size_t size, uint32_t block_size);
 
 t_zone *add_zone(size_t size)
 {
@@ -25,7 +25,7 @@ t_zone *add_zone(size_t size)
     return (alloc_zone(zone, size));
 }
 
-int extend_zones()
+static int extend_zones()
 {
     const uint8_t isNotInitialized = storage.zones == NULL || storage.capacity == 0;
     if (isNotInitialized)
@@ -58,7 +58,7 @@ int extend_zones()
     return (0);
 }
 
-t_zone *alloc_zone(t_zone *zone, size_t size)
+static t_zone *alloc_zone(t_zone *zone, size_t size)
 {
     uint32_t block_size = 0; // 0 is default for single allocation
 
@@ -114,7 +114,7 @@ t_zone *alloc_zone(t_zone *zone, size_t size)
     return (zone);
 }
 
-uint32_t get_max_nbr_of_blocks(size_t size, uint32_t block_size)
+static uint32_t get_max_nbr_of_blocks(size_t size, uint32_t block_size)
 {
     if (size <= (block_size + 17))
         return (0);
@@ -140,7 +140,7 @@ uint32_t get_max_nbr_of_blocks(size_t size, uint32_t block_size)
     return (nbr_of_max_blocks);
 }
 
-t_zone *get_empty_zone(void)
+static t_zone *get_empty_zone(void)
 {
     size_t i = 0;
 
@@ -153,7 +153,7 @@ t_zone *get_empty_zone(void)
     return (NULL);
 }
 
-void ft_bzero(uint8_t *ptr, size_t size)
+static void ft_bzero(uint8_t *ptr, size_t size)
 {
     if (ptr == NULL)
         return;

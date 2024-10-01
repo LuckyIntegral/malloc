@@ -1,5 +1,5 @@
-SO_FLAGS := -g -shared -fPIC
-CFLAGS := -I. -fPIC # -Wall -Werror -Wextra
+SO_FLAGS := -shared -fPIC
+CFLAGS := -fPIC # -Wall -Werror -Wextra
 
 ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
@@ -11,7 +11,7 @@ LD_PRELOAD_CMD := LD_PRELOAD=$(shell pwd)/libft_malloc.so
 
 # LIBS
 OBJDIR := ./build
-CFILES := malloc.c free.c utils.c zone.c realloc.c visualizer.c
+CFILES := malloc.c free.c utils.c zone.c realloc.c visualizer.c visualizer_utils.c
 CFILES := $(addprefix source/, $(CFILES))
 OFILES := $(CFILES:%.c=$(OBJDIR)/%.o)
 
@@ -39,10 +39,6 @@ fclean: clean
 
 re: fclean all
 
-test:  test_main 
-
-test_main: re
-	@gcc -o tests/test tests/main.c
-	@echo "(main): Test compiled!"
-	@$(LD_PRELOAD_CMD) ./tests/test
-	@rm -f ./tests/test
+test: all
+	gcc tests/main.c -L. -lft_malloc
+	LD_LIBRARY_PATH=. LD_PRELOAD="./libft_malloc.so" ./a.out

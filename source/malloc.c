@@ -8,19 +8,21 @@ t_storage storage = {
     .total_allocated_memory = 0,
 };
 
-void *get_block_memory(uint32_t block_type);
-void *get_single_memory(size_t size);
+static void *get_block_memory(uint32_t block_type);
+static void *get_single_memory(size_t size);
+static uint8_t retrieve_page_size(void);
 
 void *malloc(size_t size)
 {
-    if (storage.page_size == 0)
-        storage.page_size = getpagesize();
-
     if (size == 0)
+        return (NULL);
+
+    if (retrieve_page_size())
         return (NULL);
 
     for (size_t i = 0; i < BLOCK_SIZES_LEN; i++)
     {
+        
         const uint32_t block_size = storage.block_sizes[i];
         if (size <= block_size)
         {
@@ -35,7 +37,7 @@ void *malloc(size_t size)
     return (get_single_memory(size));
 }
 
-void *get_block_memory(uint32_t block_type)
+static void *get_block_memory(uint32_t block_type)
 {
     for (size_t i = 0; i < storage.capacity; i++)
     {
@@ -47,7 +49,7 @@ void *get_block_memory(uint32_t block_type)
             continue;
 
         t_metadata_block metadata = read_metadata_block_from_array(zone->mem);
-        if (metadata.size_of_each_block < block_type)
+        if (metadata.size_of_each_block != block_type)
             continue;
         const uint32_t isEnoughSpace = metadata.nbr_of_used_blocks < metadata.max_nbr_of_blocks;
         if (!isEnoughSpace)
@@ -75,10 +77,22 @@ void *get_block_memory(uint32_t block_type)
     return (NULL);
 }
 
-void *get_single_memory(size_t size)
+static void *get_single_memory(size_t size)
 {
     t_zone *new = add_zone(size);
     if (new == NULL)
         return (NULL);
     return new->mem;
+}
+
+static uint8_t retrieve_page_size()
+{
+    if (storage.page_size == 0)
+    {
+        long page_size = sysconf(_SC_PAGESIZE);
+        if (page_size == -1)
+            return (1);
+        storage.page_size = page_size;
+    }
+    return (0);
 }

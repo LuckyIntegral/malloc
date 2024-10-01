@@ -1,9 +1,9 @@
 #include "malloc.h"
 
 t_zone *get_zone(uint8_t *ptr);
-void free_single(t_zone *zone);
-void free_block(t_zone *zone, uint8_t *ptr);
-void dealloc_zone(t_zone *zone);
+static void free_single(t_zone *zone);
+static void free_block(t_zone *zone, uint8_t *ptr);
+static void dealloc_zone(t_zone *zone);
 
 void free(void *ptr)
 {
@@ -20,7 +20,7 @@ void free(void *ptr)
         free_block(zone, ptr);
 }
 
-void free_single(t_zone *zone)
+static void free_single(t_zone *zone)
 {
     dealloc_zone(zone);
 }
@@ -43,7 +43,7 @@ void free_block(t_zone *zone, uint8_t *ptr)
         dealloc_zone(zone);
 }
 
-void dealloc_zone(t_zone *zone)
+static void dealloc_zone(t_zone *zone)
 {
     dealloc(zone->mem, zone->size);
     zone->mem = NULL;
