@@ -1,5 +1,5 @@
 {
-	"name": "42-malloc",
+	"name": "malloc",
 	"runArgs": ["--name", "dev_42-malloc"],
 	"dockerFile": "Dockerfile",
 	"mounts": [
@@ -17,5 +17,5 @@
 			]
 		}
 	},
-	"workspaceFolder": "/workspaces/42-malloc"
+	"workspaceFolder": "/workspaces/malloc"
 }
