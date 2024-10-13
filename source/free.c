@@ -28,7 +28,7 @@ static void free_single(t_zone *zone)
 void free_block(t_zone *zone, uint8_t *ptr)
 {
     t_metadata_block metadata = read_metadata_block_from_array(zone->mem);
-    const uint32_t relative_ptr = ptr - zone->mem - 16;
+    const uint32_t relative_ptr = ptr - (zone->mem + metadata.index_of_first_alloc);
     const uint32_t index = relative_ptr / metadata.size_of_each_block;
 
     const uint8_t byte = index / 8;
