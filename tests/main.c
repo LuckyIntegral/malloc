@@ -23,5 +23,7 @@ int main()
     }
     p = malloc(42);
 
+    show_alloc_mem();
+
     return (0);
 }

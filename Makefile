@@ -1,7 +1,7 @@
 SO_FLAGS := -shared -fPIC
-CFLAGS := -fPIC # -Wall -Werror -Wextra
+CFLAGS := -fPIC -Wall -Werror -Wextra
 
-ifeq ($(HOSTTYPE),)
+ifeq (,$(HOSTTYPE))
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
@@ -42,3 +42,4 @@ re: fclean all
 test: all
 	gcc tests/main.c -L. -lft_malloc
 	LD_LIBRARY_PATH=. LD_PRELOAD="./libft_malloc.so" ./a.out
+	rm -f ./a.out
