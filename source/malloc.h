@@ -7,6 +7,10 @@
 #include <stdint.h>	  		//  uintXX_t
 #include <sys/resource.h>	// getrlimit()
 
+#ifndef MAP_ANONYMOUS
+#define MAP_ANONYMOUS 0x20 // cant find MAP_ANONYMOUS in sys/mman.h when running on Macs
+#endif
+
 #define BLOCK_SIZES_LEN 2
 #define BLOCK_SIZES \
 	{               \
